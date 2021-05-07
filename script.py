@@ -50,6 +50,14 @@ class TaipowerCollector(object):
 
         for data in aaData:
 
+            ### data format
+            # [
+            #   ["ENERGY", "UNIT", "CAPACITY", "NET", "NOTE"],
+            #   ["核能","核二#1","985.0","886.1","89.959%","燃料限制"],
+            #   ...
+            #   ...
+            # ]
+            ###
             energy = converter[data[0]]
             unit = stripper(data[1])
             cap = data[2]
@@ -69,18 +77,19 @@ class TaipowerCollector(object):
             energy_net = energy + '_net'
             energy_cap = energy + '_cap'
 
+            # to prevent been overwrote by same energy(key)
             if pre_energy != now_energy:
                 metrics[energy_net] = GaugeMetricFamily(
                     'taipower_energy_{0}_net'.format(energy),
                     'Taipower energy ' + energy + 'net generation',
                     labels=['unit'])
-            if pre_energy != now_energy:
                 metrics[energy_cap] = GaugeMetricFamily(
                     'taipower_energy_{0}_cap'.format(energy),
                     'Taipower energy ' + energy + 'generation capacity',
                     labels=['unit'])
 
             pre_energy = now_energy
+
             metrics[energy_cap].add_metric([unit], cap)
             metrics[energy_net].add_metric([unit], net)
 
