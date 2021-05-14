@@ -74,24 +74,17 @@ class TaipowerCollector(object):
             if net == '-' or net == 'N/A':
                 net = 0
 
-            energy_net = energy + '_net'
-            energy_cap = energy + '_cap'
-
             # to prevent been overwrote by same energy(key)
             if pre_energy != now_energy:
-                metrics[energy_net] = GaugeMetricFamily(
-                    'taipower_energy_{0}_net'.format(energy),
-                    'Taipower energy ' + energy + 'net generation',
-                    labels=['unit'])
-                metrics[energy_cap] = GaugeMetricFamily(
-                    'taipower_energy_{0}_cap'.format(energy),
-                    'Taipower energy ' + energy + 'generation capacity',
-                    labels=['unit'])
+                metrics[energy] = GaugeMetricFamily(
+                    'taipower_energy_{0}'.format(energy),
+                    'Taipower energy ' + energy + ' generation',
+                    labels=['unit', 'gen'])
 
             pre_energy = now_energy
 
-            metrics[energy_cap].add_metric([unit], cap)
-            metrics[energy_net].add_metric([unit], net)
+            metrics[energy].add_metric([unit, 'cap'], cap)
+            metrics[energy].add_metric([unit, 'net'], net)
 
         for m in metrics.values():
             yield m
