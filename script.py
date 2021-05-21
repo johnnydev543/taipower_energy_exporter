@@ -47,6 +47,8 @@ class TaipowerCollector(object):
 
         pre_energy = ''
         now_energy = ''
+        total_net = 0
+        total_cap = 0
 
         for data in aaData:
 
@@ -83,8 +85,21 @@ class TaipowerCollector(object):
 
             pre_energy = now_energy
 
+            total_cap = total_cap + float(cap)
+            total_net = total_net + float(net)
+
             metrics[energy].add_metric([unit, 'cap'], cap)
             metrics[energy].add_metric([unit, 'net'], net)
+
+        metrics['total_cap'] = GaugeMetricFamily(
+            'taipower_energy_total_cap',
+            'Taipower energy total generation capacity')
+        metrics['total_net'] = GaugeMetricFamily(
+            'taipower_energy_total_net',
+            'Taipower energy total net generation')
+
+        metrics['total_cap'].add_metric('', total_cap)
+        metrics['total_net'].add_metric('', total_net)
 
         for m in metrics.values():
             yield m
