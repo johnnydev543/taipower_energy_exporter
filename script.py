@@ -53,7 +53,7 @@ class TaipowerCollector(object):
         time_delta = timedelta(minutes=10)
         txt_time_delta = now_time - txt_time
         if txt_time_delta > time_delta:
-            print("Old data. Time elapsed: ", txt_time_delta)
+            print("Outdated data. Time elapsed: ", txt_time_delta)
             return
         # print(txt_time)
         # print(now_time)
