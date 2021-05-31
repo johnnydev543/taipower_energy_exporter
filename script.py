@@ -50,10 +50,10 @@ class TaipowerCollector(object):
         # not using data if the txt file time exceeded 10 mins
         txt_time = datetime.strptime(line_0[""], "%Y-%m-%d %H:%M")
         now_time = datetime.now()
-        time_delta = timedelta(minutes=10)
+        time_delta = timedelta(minutes=20)
         txt_time_delta = now_time - txt_time
         if txt_time_delta > time_delta:
-            print("Old data. Time elapsed: ", txt_time_delta)
+            print("Outdated data. Time elapsed: ", txt_time_delta)
             return
         # print(txt_time)
         # print(now_time)
