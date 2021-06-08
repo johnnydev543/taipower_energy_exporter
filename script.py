@@ -1,12 +1,11 @@
-from json import decoder
 import time
 from datetime import datetime, timedelta
 from prometheus_client.core import GaugeMetricFamily, REGISTRY
 from prometheus_client import start_http_server
-import requests
 import json
 import re
-import urllib
+from urllib.request import Request, urlopen
+from urllib.error import URLError, HTTPError
 
 url = "https://data.taipower.com.tw/opendata01/apply/file/d006001/001.txt"
 
@@ -36,18 +35,37 @@ class TaipowerCollector(object):
     def collect(self):
 
         metrics = {}
-        file = urllib.request.urlopen(url)
 
+        # file = urlopen(url)
         # with open('001.txt') as f:
         #     decoded_line = f.readlines()
         #     decoded_line = decoded_line[0]
-        for line in file:
-            decoded_line = line.decode("utf-8")
-        line_0 = json.loads(decoded_line)
-        aaData = line_0['aaData']
+        # for line in file:
+        #     decoded_line = line.decode("utf-8")
+        # line_0 = json.loads(decoded_line)
+        # aaData = line_0['aaData']
+
+        req = Request(url)
+
+        try:
+            file = urlopen(req)
+        except HTTPError as e:
+            print('HTTPError code:', e.code)
+            exit(1)
+        except URLError as e:
+            print('Reason:', e.reason)
+            exit(1)
+        else:
+            with open('001.txt') as f:
+                decoded_line = f.readlines()
+                decoded_line = decoded_line[0]
+                for line in file:
+                    decoded_line = line.decode("utf-8")
+                line_0 = json.loads(decoded_line)
+                aaData = line_0['aaData']
 
         # compare the txt time and the current time,
-        # not using data if the txt file time exceeded 10 mins
+        # not using data if the txt file time exceeded 20 mins
         txt_time = datetime.strptime(line_0[""], "%Y-%m-%d %H:%M")
         now_time = datetime.now()
         time_delta = timedelta(minutes=20)
