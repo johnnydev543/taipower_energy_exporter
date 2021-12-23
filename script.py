@@ -1,4 +1,5 @@
 import time
+from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
 from prometheus_client.core import GaugeMetricFamily, REGISTRY
 from prometheus_client import start_http_server
@@ -23,7 +24,8 @@ converter = {
     '太陽能':'solar',
     '抽蓄發電':'pumping_gen',
     '抽蓄負載':'pumping_load',
-    '地熱':'geothermal'
+    '地熱':'geothermal',
+    '其它再生能源':'other_renewable_energy'
 }
 
 ## remove () and included characters from the string
@@ -92,6 +94,8 @@ class TaipowerCollector(object):
             #   ...
             # ]
             ###
+            data[0] = BeautifulSoup(data[0]).get_text()
+            data[0] = stripper(data[0])
             energy = converter[data[0]]
             unit = stripper(data[1])
             cap = data[2]
