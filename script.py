@@ -94,7 +94,7 @@ class TaipowerCollector(object):
             #   ...
             # ]
             ###
-            data[0] = BeautifulSoup(data[0]).get_text()
+            data[0] = BeautifulSoup(data[0], features="html.parser").get_text()
             data[0] = stripper(data[0])
             energy = converter[data[0]]
             unit = stripper(data[1])
