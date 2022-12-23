@@ -60,6 +60,9 @@ class TaipowerCollector(object):
         except OSError as e:
             print('OSError: ', e.code, e.reason)
             exit(1)
+        except Exception as e:
+            print("Exception: ", e.code, e.reason)
+            exit(1)
         else:
             with open('001.txt') as f:
                 decoded_line = f.readlines()
