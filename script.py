@@ -52,10 +52,13 @@ class TaipowerCollector(object):
         try:
             file = urlopen(req)
         except HTTPError as e:
-            print('HTTPError code:', e.code)
+            print('HTTPError: ', e.code, e.reason)
             exit(1)
         except URLError as e:
-            print('Reason:', e.reason)
+            print('URLError: ', e.code, e.reason)
+            exit(1)
+        except OSError as e:
+            print('OSError: ', e.code, e.reason)
             exit(1)
         else:
             with open('001.txt') as f:
