@@ -5,8 +5,7 @@ from prometheus_client.core import GaugeMetricFamily, REGISTRY
 from prometheus_client import start_http_server
 import json
 import re
-from urllib.request import Request, urlopen
-from urllib.error import URLError, HTTPError
+from urllib.request import urlopen
 
 url = "https://data.taipower.com.tw/opendata01/apply/file/d006001/001.txt"
 
@@ -38,28 +37,13 @@ class TaipowerCollector(object):
 
         metrics = {}
 
-        # file = urlopen(url)
-        # with open('001.txt') as f:
-        #     decoded_line = f.readlines()
-        #     decoded_line = decoded_line[0]
-        # for line in file:
-        #     decoded_line = line.decode("utf-8")
-        # line_0 = json.loads(decoded_line)
-        # aaData = line_0['aaData']
-
         try:
-            req = Request(url)
-        except Exception as e:
-            print('Request Error', '[', datetime.now().strftime("%Y-%m-%d %H:%M:%S"), ']', e)
-            exit(1)
-
-        try:
-            file = urlopen(req)
+            file = urlopen(url)
         except Exception as e:
             print('[', datetime.now().strftime("%Y-%m-%d %H:%M:%S"), ']', e)
             exit(1)
         else:
-            with open('001.txt') as f:
+            with file as f:
                 decoded_line = f.readlines()
                 decoded_line = decoded_line[0]
                 for line in file:
