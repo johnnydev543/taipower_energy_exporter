@@ -47,7 +47,11 @@ class TaipowerCollector(object):
         # line_0 = json.loads(decoded_line)
         # aaData = line_0['aaData']
 
-        req = Request(url)
+        try:
+            req = Request(url)
+        except Exception as e:
+            print('Request Error', '[', datetime.now().strftime("%Y-%m-%d %H:%M:%S"), ']', e)
+            exit(1)
 
         try:
             file = urlopen(req)
