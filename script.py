@@ -38,7 +38,7 @@ class TaipowerCollector(object):
         metrics = {}
 
         try:
-            file = urlopen(url)
+            file = urlopen(url, timeout=1)
         except Exception as e:
             print('[', datetime.now().strftime("%Y-%m-%d %H:%M:%S"), ']', e)
             exit(1)
