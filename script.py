@@ -39,9 +39,12 @@ class TaipowerCollector(object):
 
         try:
             file = urlopen(url, timeout=1)
+        except TimeoutError as e:
+            print('[', datetime.now().strftime("%Y-%m-%d %H:%M:%S"), ']', "TimeoutError")
         except Exception as e:
             print('[', datetime.now().strftime("%Y-%m-%d %H:%M:%S"), ']', e)
-            exit(1)
+            pass
+            # exit(1)
         else:
             with file as f:
                 decoded_line = f.readlines()
