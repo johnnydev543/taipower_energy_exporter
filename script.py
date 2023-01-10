@@ -43,8 +43,7 @@ class TaipowerCollector(object):
             print('[', datetime.now().strftime("%Y-%m-%d %H:%M:%S"), ']', "TimeoutError")
         except Exception as e:
             print('[', datetime.now().strftime("%Y-%m-%d %H:%M:%S"), ']', e)
-            pass
-            # exit(1)
+            exit(1)
         else:
             with file as f:
                 decoded_line = f.readlines()
