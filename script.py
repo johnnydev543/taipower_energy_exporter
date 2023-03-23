@@ -36,6 +36,7 @@ class TaipowerCollector(object):
     def collect(self):
 
         metrics = {}
+        aaData = []
 
         try:
             file = urlopen(url, timeout=1)
@@ -45,6 +46,7 @@ class TaipowerCollector(object):
             print('[', datetime.now().strftime("%Y-%m-%d %H:%M:%S"), ']', e)
             exit(1)
         else:
+            line_0 = []
             with file as f:
                 decoded_line = f.readlines()
                 decoded_line = decoded_line[0]
@@ -53,23 +55,23 @@ class TaipowerCollector(object):
                 line_0 = json.loads(decoded_line)
                 aaData = line_0['aaData']
 
-        # compare the txt time and the current time,
-        # not using data if the txt file time exceeded 20 mins
-        txt_time = datetime.strptime(line_0[""], "%Y-%m-%d %H:%M")
-        now_time = datetime.now()
-        time_delta = timedelta(minutes=20)
-        txt_time_delta = now_time - txt_time
-        if txt_time_delta > time_delta:
-            print("Outdated data. Time elapsed: ", txt_time_delta)
-            return
-        # print(txt_time)
-        # print(now_time)
-        # print(aaData)
+                # compare the txt time and the current time,
+                # not using data if the txt file time exceeded 20 mins
+                txt_time = datetime.strptime(line_0[""], "%Y-%m-%d %H:%M")
+                now_time = datetime.now()
+                time_delta = timedelta(minutes=20)
+                txt_time_delta = now_time - txt_time
+                if txt_time_delta > time_delta:
+                    print("Outdated data. Time elapsed: ", txt_time_delta)
+                    return
 
         pre_energy = ''
         now_energy = ''
         total_net = 0
         total_cap = 0
+
+        if not aaData:
+            return
 
         for data in aaData:
 
