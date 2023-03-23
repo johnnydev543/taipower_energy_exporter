@@ -39,7 +39,7 @@ class TaipowerCollector(object):
         aaData = []
 
         try:
-            file = urlopen(url, timeout=1)
+            file = urlopen(url, timeout=10)
         except TimeoutError as e:
             print('[', datetime.now().strftime("%Y-%m-%d %H:%M:%S"), ']', "TimeoutError")
         except Exception as e:
