@@ -29,7 +29,7 @@ converter = {
 
 ## remove () and included characters from the string
 def stripper(s):
-    s = re.sub('\(.+\)', '', s)
+    s = re.sub(r'\(.+\)', '', s)
     return s
 
 class TaipowerCollector(object):
