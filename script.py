@@ -7,7 +7,7 @@ import json
 import re
 from urllib.request import urlopen
 
-url = "https://data.taipower.com.tw/opendata/apply/file/d006001/001.json"
+url = "https://service.taipower.com.tw/data/opendata/apply/file/d006001/001.json"
 
 converter = {
     '核能':'nuclear',
