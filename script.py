@@ -24,7 +24,8 @@ converter = {
     '抽蓄發電':'pumping_gen',
     '抽蓄負載':'pumping_load',
     '地熱':'geothermal',
-    '其它再生能源':'other_renewable_energy'
+    '其它再生能源':'other_renewable_energy',
+    '儲能放電':'storage_discharge'
 }
 
 ## remove () and included characters from the string
@@ -85,7 +86,11 @@ class TaipowerCollector(object):
             ###
             data[0] = BeautifulSoup(data[0], features="html.parser").get_text()
             data[0] = stripper(data[0])
-            energy = converter[data[0]]
+            if(data[0] in converter.keys()):
+                energy = converter[data[0]]
+            else:
+                print("New energy type: ", data[0])
+
             unit = stripper(data[1])
             cap = data[2]
             net = data[3]
