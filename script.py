@@ -90,7 +90,7 @@ class TaipowerCollector(object):
             if(data[0] in converter.keys()):
                 energy = converter[data[0]]
             else:
-                print("New energy type: ", data[0])
+                print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"), "New energy type: ", data[0])
 
             unit = stripper(data[1])
             cap = data[2]
