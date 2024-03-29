@@ -25,8 +25,8 @@ converter = {
     '抽蓄負載':'pumping_load',
     '地熱':'geothermal',
     '其它再生能源':'other_renewable_energy',
-    '儲能':'energy_storage',
-    '儲能負載':'engergy_storage_load'
+    '儲能':'storage',
+    '儲能負載':'storage_load'
 }
 
 ## remove () and included characters from the string
