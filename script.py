@@ -51,7 +51,11 @@ class TaipowerCollector(object):
             line_0 = []
             with file as f:
                 decoded_line = f.readlines()
-                decoded_line = decoded_line[0]
+                try:
+                    decoded_line = decoded_line[0]
+                except Exception as e:
+                    print(e)
+
                 for line in file:
                     decoded_line = line.decode("utf-8")
                 line_0 = json.loads(decoded_line)
