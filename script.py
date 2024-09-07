@@ -63,7 +63,7 @@ class TaipowerCollector(object):
 
                 # compare the txt time and the current time,
                 # not using data if the txt file time exceeded 20 mins
-                txt_time = datetime.strptime(line_0[""], "%Y-%m-%d %H:%M")
+                txt_time = datetime.strptime(line_0["DateTime"], "%Y-%m-%dT%H:%M:%S")
                 now_time = datetime.now()
                 time_delta = timedelta(minutes=20)
                 txt_time_delta = now_time - txt_time
@@ -89,16 +89,16 @@ class TaipowerCollector(object):
             #   ...
             # ]
             ###
-            data[0] = BeautifulSoup(data[0], features="html.parser").get_text()
-            data[0] = stripper(data[0])
-            if(data[0] in converter.keys()):
-                energy = converter[data[0]]
+            data["機組類型"] = BeautifulSoup(data["機組類型"], features="html.parser").get_text()
+            data[0] = stripper(data["機組類型"])
+            if(data["機組類型"] in converter.keys()):
+                energy = converter[data["機組類型"]]
             else:
-                print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"), "New energy type: ", data[0])
+                print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"), "New energy type: ", data["機組類型"])
 
-            unit = stripper(data[1])
-            cap = data[2]
-            net = data[3]
+            unit = stripper(data["機組名稱"])
+            cap = data["裝置容量(MW)"]
+            net = data["淨發電量(MW)"]
 
             now_energy = energy
 
