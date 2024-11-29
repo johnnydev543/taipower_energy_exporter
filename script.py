@@ -50,20 +50,15 @@ class TaipowerCollector(object):
         else:
             line_0 = []
             with file as f:
-                decoded_line = f.readlines()
                 try:
-                    decoded_line = decoded_line[0]
+                    data = json.load(f)
                 except Exception as e:
                     print(e)
-
-                for line in file:
-                    decoded_line = line.decode("utf-8")
-                line_0 = json.loads(decoded_line)
-                aaData = line_0['aaData']
+                aaData = data['aaData']
 
                 # compare the txt time and the current time,
                 # not using data if the txt file time exceeded 20 mins
-                txt_time = datetime.strptime(line_0["DateTime"], "%Y-%m-%dT%H:%M:%S")
+                txt_time = datetime.strptime(data["DateTime"], "%Y-%m-%dT%H:%M:%S")
                 now_time = datetime.now()
                 time_delta = timedelta(minutes=20)
                 txt_time_delta = now_time - txt_time
