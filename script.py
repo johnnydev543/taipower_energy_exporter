@@ -41,7 +41,7 @@ class TaipowerCollector(object):
         aaData = []
 
         try:
-            response = requests.get(url, timeout=10, verify=False)
+            response = requests.get(url, timeout=10)
             response.raise_for_status()  # check if returns 200 status code
 
             # use utf-8-sig decode to remove BOM
