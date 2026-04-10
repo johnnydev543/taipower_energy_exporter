@@ -932,10 +932,12 @@
             "type": "prometheus",
             "uid": "iNnAe6U7z"
           },
+          "editorMode": "code",
           "exemplar": true,
-          "expr": "taipower_energy_oil{gen=\"net\"}",
+          "expr": "taipower_energy_fuel_oil{gen=\"net\"}",
           "interval": "",
           "legendFormat": "{{unit}}",
+          "range": true,
           "refId": "A"
         }
       ],
@@ -1370,6 +1372,6 @@
   "timezone": "browser",
   "title": "Taipower Watch",
   "uid": "e5_iUYZn2",
-  "version": 11,
+  "version": 12,
   "weekStart": ""
 }
