@@ -26,12 +26,13 @@ converter = {
     '地熱': 'geothermal',
     '其它再生能源': 'other_renewable_energy',
     '儲能': 'storage',
-    '儲能負載': 'storage_load'
+    '儲能負載': 'energy_storage_system_load',
+    '燃料油': 'fuel_oil'
 }
 
 ## remove () and included characters from the string
 def stripper(s):
-    s = re.sub(r'\(.+\)', '', s)
+    s = re.sub(r'\s*\(.*\)', '', s)
     return s
 
 class TaipowerCollector(object):
@@ -89,7 +90,11 @@ class TaipowerCollector(object):
             # ]
             ###
             data["機組類型"] = BeautifulSoup(data["機組類型"], features="html.parser").get_text()
-            data[0] = stripper(data["機組類型"])
+            data["機組類型"] = stripper(data["機組類型"])
+            data[0] = data["機組類型"]
+
+            energy = ''
+
             if data["機組類型"] in converter.keys():
                 energy = converter[data["機組類型"]]
             else:
