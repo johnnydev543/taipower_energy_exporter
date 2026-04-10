@@ -6,6 +6,8 @@ from prometheus_client import start_http_server
 import json
 import re
 import requests
+import urllib3
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 url = "https://service.taipower.com.tw/data/opendata/apply/file/d006001/001.json"
 
@@ -42,7 +44,7 @@ class TaipowerCollector(object):
         aaData = []
 
         try:
-            response = requests.get(url, verify=False, timeout=10)
+            response = requests.get(url, timeout=10)
             response.raise_for_status()  # check if returns 200 status code
 
             # use utf-8-sig decode to remove BOM
