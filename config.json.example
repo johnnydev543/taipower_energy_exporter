@@ -1,0 +1,6 @@
+{
+    "INFLUXDB_URL": "https://your-influxdb-url:8086",
+    "INFLUXDB_TOKEN": "your-token-here",
+    "INFLUXDB_ORG": "your-organization",
+    "INFLUXDB_BUCKET": "taipower-bucket"
+}
