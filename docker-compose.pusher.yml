@@ -1,0 +1,24 @@
+services:
+  taipower_pusher:
+    build: ./volumes/app
+    image: taipower-pusher:local
+    container_name: taipower_pusher
+    restart: unless-stopped
+    working_dir: /app
+    volumes:
+      - ./volumes/app:/app:ro
+      - ./volumes/state:/state
+      - /etc/localtime:/etc/localtime:ro
+    networks:
+      - influxdb
+    command: python -u /app/influx_pusher.py
+    logging:
+      driver: json-file
+      options:
+        max-size: 5m
+        max-file: "2"
+
+networks:
+  influxdb:
+    external: true
+    name: net_influxdb

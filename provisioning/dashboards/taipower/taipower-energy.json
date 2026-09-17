@@ -1,0 +1,42 @@
+{
+  "uid": "taipower-energy",
+  "title": "Taipower Energy",
+  "tags": ["taipower", "influxdb"],
+  "timezone": "Asia/Taipei",
+  "schemaVersion": 41,
+  "version": 1,
+  "refresh": "5m",
+  "time": {"from": "now-24h", "to": "now"},
+  "panels": [
+    {
+      "id": 1,
+      "type": "stat",
+      "title": "即時總發電量",
+      "datasource": {"type": "influxdb", "uid": "taipower-influxdb"},
+      "gridPos": {"x": 0, "y": 0, "w": 8, "h": 6},
+      "targets": [{"refId": "A", "query": "SELECT time, total_net_generation FROM taipower_energy_total WHERE $__timeFilter(time) ORDER BY time"}],
+      "fieldConfig": {"defaults": {"unit": "megawatt", "decimals": 1}, "overrides": []},
+      "options": {"reduceOptions": {"values": false, "calcs": ["lastNotNull"], "fields": ""}, "orientation": "auto", "textMode": "auto", "colorMode": "value", "graphMode": "area", "justifyMode": "auto"}
+    },
+    {
+      "id": 2,
+      "type": "timeseries",
+      "title": "依能源類型發電量",
+      "datasource": {"type": "influxdb", "uid": "taipower-influxdb"},
+      "gridPos": {"x": 8, "y": 0, "w": 16, "h": 12},
+      "targets": [{"refId": "A", "query": "SELECT time, energy_type, sum(net_generation) AS net_generation FROM taipower_energy WHERE $__timeFilter(time) GROUP BY time, energy_type ORDER BY time"}],
+      "fieldConfig": {"defaults": {"unit": "megawatt", "decimals": 1, "custom": {"drawStyle": "line", "lineInterpolation": "linear", "lineWidth": 2, "fillOpacity": 8, "showPoints": "auto", "spanNulls": true, "stacking": {"mode": "normal", "group": "A"}}}, "overrides": []},
+      "options": {"legend": {"displayMode": "table", "placement": "bottom", "calcs": ["lastNotNull"]}, "tooltip": {"mode": "multi", "sort": "desc"}}
+    },
+    {
+      "id": 3,
+      "type": "timeseries",
+      "title": "水力各機組",
+      "datasource": {"type": "influxdb", "uid": "taipower-influxdb"},
+      "gridPos": {"x": 0, "y": 6, "w": 8, "h": 6},
+      "targets": [{"refId": "A", "query": "SELECT time, unit, net_generation FROM taipower_energy WHERE energy_type = 'hydro' AND $__timeFilter(time) ORDER BY time"}],
+      "fieldConfig": {"defaults": {"unit": "megawatt", "decimals": 1}, "overrides": []},
+      "options": {"legend": {"displayMode": "list", "placement": "bottom"}, "tooltip": {"mode": "multi", "sort": "none"}}
+    }
+  ]
+}

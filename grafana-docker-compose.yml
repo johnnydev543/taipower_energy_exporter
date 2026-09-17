@@ -1,0 +1,47 @@
+services:
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    restart: unless-stopped
+    environment:
+      - GF_UID=1000
+      - GF_GID=1004
+      # Password is set once on first run
+      - GF_SERVER_ROOT_URL=https://${DOMAIN}
+#      - GF_AUTH_LOGIN_MAXIMUM_INACTIVE_LIFETIME=30d
+#      - GF_AUTH_ANONYMOUS_ENABLED=true
+#      - GF_AUTH_ANONYMOUS_ORG_NAME=Guest
+#      - GF_AUTH_ANONYMOUS_ORG_ROLE=Viewer
+      - GF_REMOTE_CACHE_TYPE=redis
+      - GF_REMOTE_CACHE_CONNSTR=addr=redis:6379
+      - GF_LOG_LEVEL=INFO
+      - GF_LOG_MODE=console file
+      - GF_DATE_FORMATS_DEFAULT_TIMEZONE=Asia/Taipei
+      # SMTP disabled — switched to LINE Bot for alert notifications
+      - GF_SMTP_ENABLED=false
+    env_file:
+      - ./volumes/provisioning/influx.env
+    networks:
+      - prometheus
+      - influxdb
+    volumes:
+      - ./volumes/lib:/var/lib/grafana
+      - ./volumes/provisioning:/etc/grafana/provisioning:ro
+      - /var/log/grafana/:/var/log/grafana/
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - 3000:3000
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=net_traefik
+      - traefik.http.routers.grafana-secure.entrypoints=websecure
+      - traefik.http.routers.grafana-secure.rule=Host(`${DOMAIN}`)
+      - traefik.http.services.grafana.loadbalancer.server.port=3000
+
+networks:
+  prometheus:
+    external: true
+    name: net_prometheus
+  influxdb:
+    external: true
+    name: net_influxdb

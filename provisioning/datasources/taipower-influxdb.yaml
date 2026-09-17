@@ -1,0 +1,17 @@
+apiVersion: 1
+
+datasources:
+  - name: Taipower InfluxDB
+    uid: taipower-influxdb
+    type: influxdb
+    access: proxy
+    url: http://influxdb3-core:8181
+    isDefault: false
+    editable: true
+    jsonData:
+      version: SQL
+      dbName: taipower
+      httpMode: POST
+      insecureGrpc: true
+    secureJsonData:
+      token: $INFLUXDB_TOKEN

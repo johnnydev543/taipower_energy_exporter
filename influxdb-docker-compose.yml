@@ -1,0 +1,51 @@
+# docker-compose.yml
+services:
+  influxdb3-core:
+    container_name: influxdb3-core
+    image: influxdb:3-core
+    networks:
+      - influxdb
+    ports:
+      - 8181:8181
+    command:
+      - influxdb3
+      - serve
+      - --node-id=node0
+      - --object-store=file
+      - --data-dir=/var/lib/influxdb3/data
+      - --plugin-dir=/var/lib/influxdb3/plugins
+      - --disable-package-management
+    environment:
+      - INFLUXD_ADMIN_TOKEN=${INFLUXD_ADMIN_TOKEN}
+      - INFLUXD_DATABASE=${INFLUXD_DATABASE:-health_data}
+      - INFLUXD_RETENTION_PERIOD=${INFLUXD_RETENTION_PERIOD:-0}
+      - INFLUXDB3_LOG_FILTER=${INFLUXDB3_LOG_FILTER:-error}
+      - TZ=${TZ:-Asia/Taipei}
+    volumes:
+      - ./volumes/influxdb3:/var/lib/influxdb3
+
+  influxdb-ui:
+    image: influxdata/influxdb3-ui:latest
+    container_name: influxdb3_explorer
+    ports:
+      - "8081:8080"
+    volumes:
+      - ./volumes/explorer/config:/app-root/config:ro
+      - ./volumes/explorer/db:/db:rw
+    command: ["--mode=admin"]
+    environment:
+      # 自動填入連線資訊，方便登入
+      - INFLUXDB_URL=http://influxdb3-core:8181
+      - INFLUXDB_ORG=my_org
+      - INFLUXDB_TOKEN=${INFLUXD_ADMIN_TOKEN}
+      - SESSION_SECRET_KEY=${SESSION_SECRET_KEY}
+    restart: unless-stopped
+    depends_on:
+      - influxdb3-core
+    networks:
+      - influxdb
+
+networks:
+  influxdb:
+    external: true
+    name: net_influxdb
